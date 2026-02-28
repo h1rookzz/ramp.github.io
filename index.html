@@ -1,59 +1,155 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>rampaev</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAMP FF | Digital Space</title>
+    <style>
+        /* Полный сброс стилей */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+          
+            background: #000; 
+            overflow: hidden; 
+            font-family: 'Courier New', monospace; 
+        }
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top, #ff0000, #000000);
-      color: white;
-      text-align: center;
-    }
+        /* Холст для Матрицы */
+        canvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: 0; 
+        }
 
-    .container {
-      padding: 40px 20px;
-    }
+        /* Контент поверх фона */
+        .container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
+        }
 
-    h1 {
-      font-size: 42px;
-      color: #ff1a1a;
-      margin-bottom: 20px;
-    }
+        .profile-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ff41;
+            padding: 40px 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.4);
+            max-width: 90%;
+            width: 350px;
+        }
 
-    p {
-      font-size: 18px;
-      opacity: 0.9;
-      margin-bottom: 30px;
-    }
+        h1 {
+            color: #00ff41;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #00ff41;
+        }
 
-    a {
-      display: block;
-      margin: 20px auto;
-      width: 80%;
-      max-width: 320px;
-      padding: 18px;
-      background: linear-gradient(90deg, #ff0000, #ff4d4d);
-      color: white;
-      text-decoration: none;
-      border-radius: 50px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-  </style>
+        .status {
+            color: #fff;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .status::before { content: "> "; color: #00ff41; }
+
+        .btn {
+            display: block;
+            text-decoration: none;
+            color: #00ff41;
+            border: 1px solid #00ff41;
+            padding: 12px;
+            margin: 10px 0;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            background: transparent;
+        }
+
+        .btn:hover {
+            background: #00ff41;
+            color: #000;
+            box-shadow: 0 0 20px #00ff41;
+            transform: scale(1.05);
+        }
+
+        /* Эффект мерцания для ника */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        h1 { animation: blink 2s infinite; }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <h1>rampaev</h1>
 
-    <p>😈 Лучшие софты на iOS. Всё для твоего кайфа!</p>
+    <canvas id="matrix"></canvas>
 
-    <a href="https://t.me/yourcatalog">ПОКАЗАТЬ КАТАЛОГ</a>
-    <a href="https://t.me/yourusername">СВЯЗЬ СО МНОЙ</a>
-  </div>
+    <div class="container">
+        <div class="profile-card">
+            <h1>RAMP FF</h1>
+            <p class="status">System hacked by Rampaev</p>
+            
+            <div class="links">
+                <a href="https://t.me/rampaev" class="btn" target="_blank">TELEGRAM</a>
+                <a href="#" class="btn" onclick="alert('Coming Soon...')">PROJECTS</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()*&^%";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const rainDrops = [];
+
+        for( let x = 0; x < columns; x++ ) {
+            rainDrops[x] = 1;
+        }
+
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+
+            for(let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+                if(rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975){
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        setInterval(draw, 30);
+    </script>
 </body>
 </html>
